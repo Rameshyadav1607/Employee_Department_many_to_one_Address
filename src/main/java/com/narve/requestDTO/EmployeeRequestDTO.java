@@ -1,11 +1,9 @@
 package com.narve.requestDTO;
 
-import java.util.List;
 
 public class EmployeeRequestDTO {
 	private String name;
     private Long departmentId;
-    private List<AddressRequestDTO> addresses;
 	public String getName() {
 		return name;
 	}
@@ -18,13 +16,7 @@ public class EmployeeRequestDTO {
 	public void setDepartmentId(Long departmentId) {
 		this.departmentId = departmentId;
 	}
-	public List<AddressRequestDTO> getAddresses() {
-		return addresses;
-	}
-	public void setAddresses(List<AddressRequestDTO> addresses) {
-		this.addresses = addresses;
-	}
-    
+   
     
 
 }

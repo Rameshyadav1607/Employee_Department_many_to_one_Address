@@ -1,32 +1,24 @@
 package com.narve.requestDTO;
 
+import java.util.List;
 
 public class AddressRequestDTO {
-	    private String street;
-	    private String city;
-	    private String state;
-	    
-		public String getStreet() {
-			return street;
-		}
-		public void setStreet(String street) {
-			this.street = street;
-		}
-		public String getCity() {
-			return city;
-		}
-		public void setCity(String city) {
-			this.city = city;
-		}
-		public String getState() {
-			return state;
-		}
-		public void setState(String state) {
-			this.state = state;
-		}
-		
-	    
-	    
-	    
+	
+	private Long empId;
+	private List<AddressDTO> addressDTO;
+	
+	public Long getEmpId() {
+		return empId;
+	}
+	public void setEmpId(Long empId) {
+		this.empId = empId;
+	}
+	public List<AddressDTO> getAddressDTO() {
+		return addressDTO;
+	}
+	public void setAddressDTO(List<AddressDTO> addressDTO) {
+		this.addressDTO = addressDTO;
+	}
+	
 
 }

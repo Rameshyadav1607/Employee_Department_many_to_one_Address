@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.narve.model.Employee;
 import com.narve.requestDTO.EmployeeRequestDTO;
 import com.narve.responseDTO.EmployeeResponseDTO;
 import com.narve.service.EmployeeService;

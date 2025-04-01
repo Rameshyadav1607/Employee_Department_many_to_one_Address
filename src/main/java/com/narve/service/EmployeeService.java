@@ -3,20 +3,18 @@ package com.narve.service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import com.narve.model.Address;
 import com.narve.model.Department;
 import com.narve.model.Employee;
 import com.narve.repository.AddressRepository;
 import com.narve.repository.DepartmentRepository;
 import com.narve.repository.EmployeeRepository;
 import com.narve.requestDTO.EmployeeRequestDTO;
+import com.narve.responseDTO.AddressResponseDTO;
 import com.narve.responseDTO.EmployeeResponseDTO;
-
 
 @Service
 public class EmployeeService {
@@ -42,15 +40,7 @@ public class EmployeeService {
 	            Department department = departmentRepository.findById(employeeRequestDTO.getDepartmentId())
 	                    .orElseThrow(() -> new RuntimeException("Department not found"));
 	            employee.setDepartment(department);
-	            
-	            List<Address> addresses = employeeRequestDTO.getAddresses().stream().map(addressDTO -> {
-	                Address address = modelMapper.map(addressDTO, Address.class);
-	                address.setEmployee(employee);
-	                return address;
-	            }).collect(Collectors.toList());
-	            
-	            employee.setAddresses(addresses);
-	            
+	            	            
 	            employeeRepository.save(employee);
 	            return ResponseEntity.ok("Record saved successfully");
 	        } catch (Exception e) {
@@ -60,18 +50,27 @@ public class EmployeeService {
 	    
 	   
 
-		
+		 public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
+		        try {
+		            List<Employee> employees = employeeRepository.findAll();
 
-		public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
-	        try {
-	            List<EmployeeResponseDTO> employees = employeeRepository.findAll().stream()
-	                    .map(emp -> modelMapper.map(emp, EmployeeResponseDTO.class))
-	                    .collect(Collectors.toList());
-	            return ResponseEntity.ok(employees);
-	        } catch (Exception e) {
-	            return ResponseEntity.internalServerError().build();
-	        }
-	    }
+		            List<EmployeeResponseDTO> dtoList = employees.stream().map(employee -> {
+		                EmployeeResponseDTO dto = modelMapper.map(employee, EmployeeResponseDTO.class);
+		                dto.setDepartmentId(employee.getDepartment() != null ? employee.getDepartment().getId() : null);
+
+		                List<AddressResponseDTO> addressDTOs = employee.getAddresses().stream()
+		                        .map(address -> modelMapper.map(address, AddressResponseDTO.class))
+		                        .collect(Collectors.toList());
+
+		                dto.setAddresses(addressDTOs);
+		                return dto;
+		            }).collect(Collectors.toList());
+
+		            return ResponseEntity.ok(dtoList);
+		        } catch (Exception e) {
+		            return ResponseEntity.internalServerError().build();
+		        }
+		    }
 	    
 	    public ResponseEntity<String> deleteEmployee(Long id) {
 	        try {
@@ -96,30 +95,12 @@ public class EmployeeService {
 	               
 	                employee.setName(employeeRequestDTO.getName());
 
-	                
-	                if (!employee.getDepartment().getId().equals(employeeRequestDTO.getDepartmentId())) {
-	                    Department department = departmentRepository.findById(employeeRequestDTO.getDepartmentId())
-	                            .orElseThrow(() -> new RuntimeException("Department not found"));
-	                    employee.setDepartment(department);
-	                }
+	              Department  department=departmentRepository.findById(employeeRequestDTO.getDepartmentId()).orElseThrow(() ->new RuntimeException("department not found"));
+                  employee.setDepartment(department);
 
-	               
-	                addressRepository.deleteAll(employee.getAddresses()); 
+	              Employee  employeesaved=employeeRepository.save(employee); 
 
-	                List<Address> updatedAddresses = employeeRequestDTO.getAddresses().stream().map(addressDTO -> {
-	                    Address address = modelMapper.map(addressDTO, Address.class);
-	                    address.setEmployee(employee); 
-	                    return address;
-	                }).collect(Collectors.toList());
-
-	                employee.setAddresses(updatedAddresses);
-	                employeeRepository.save(employee); 
-
-	                
-	                EmployeeResponseDTO responseDTO = modelMapper.map(employee, EmployeeResponseDTO.class);
-	                responseDTO.setDepartmentId(employee.getDepartment().getId());
-
-	                return ResponseEntity.ok(responseDTO);
+	                return new ResponseEntity<>("employee updated",HttpStatus.OK);
 	            } else {
 	                return ResponseEntity.status(404).body("Employee not found with ID: " + id);
 	            }

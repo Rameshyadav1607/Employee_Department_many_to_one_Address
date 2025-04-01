@@ -1,17 +1,11 @@
-package com.narve.responseDTO;
+package com.narve.requestDTO;
 
-public class AddressResponseDTO {
-	 private Long id;
+
+public class AddressDTO {
 	    private String street;
 	    private String city;
 	    private String state;
-	    private Long empId; //
-		public Long getId() {
-			return id;
-		}
-		public void setId(Long id) {
-			this.id = id;
-		}
+	    
 		public String getStreet() {
 			return street;
 		}
@@ -30,15 +24,9 @@ public class AddressResponseDTO {
 		public void setState(String state) {
 			this.state = state;
 		}
-		public Long getEmpId() {
-			return empId;
-		}
-		public void setEmpId(Long empId) {
-			this.empId = empId;
-		}
+		
+	    
 	    
 	    
 
-    
 }
-

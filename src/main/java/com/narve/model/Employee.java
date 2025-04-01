@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,7 +23,7 @@ public class Employee {
 	    @JoinColumn(name = "department_id")
 	    private Department department;
 
-	    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
+	    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	    private List<Address> addresses;
 
 		public Long getId() {
